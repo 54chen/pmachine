@@ -67,7 +67,7 @@ export default async function handler(
       access_token_secret: secret,
     }
     const client = new Twitter(config)
-    const s: Frens = await client.get('friendships/lookup', { 'screen_name': 'Johnchan' })
+    const s: Frens = await client.get('friendships/lookup', { 'screen_name': 'John_0xFF' })
     console.log(s)
     s.map((f) => {
       f.connections.map((c) => {
