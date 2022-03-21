@@ -94,6 +94,24 @@
   color: #555;
 }
 
+.buttonPrimaryClaim {
+  margin: 8px auto;
+  font-weight: 500;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1.4rem;
+  padding: 8px auto;
+  z-index: 10;
+  background-color: transparent;
+  color: #555;
+  background-color: #346df1;
+  border-color: #346df1;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.7rem 1.4rem;
+}
+
 .buttonPrimary {
   background-color: #346df1;
   border-color: #346df1;

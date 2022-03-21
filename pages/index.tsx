@@ -7,21 +7,36 @@ import { getSortedPostsData } from '../lib/posts'
 import type { GetStaticProps } from 'next'
 import { PostData } from '../lib/posts'
 import Date from '../components/date'
+import { signIn, useSession } from "next-auth/react"
+import styles from '../components/layout.module.css'
 
 type Props = {
   posts: [PostData]
 }
+function catchHello(){
 
+}
 const Home: NextPage<Props> = ({posts}:Props) => {
+  const { data: session, status } = useSession()
   return (
     <Layout home>
     <Head>
       <title>{siteTitle}</title>
     </Head>
     <section className={utilStyles.headingMd}>
-      <p>GM frens. Please tell me your Twitter name:</p>
+    {session && (
+            <div className={utilStyles.claimDIV}>
+                          
+              <Link href={`/frens`}>
+                <a className={styles.buttonPrimaryClaim}>Claim my POAP / 获取POAP链接</a>
+              </Link>
+
+            </div>
+          )}
     </section>
-    <section className={utilStyles.headingMd}>…</section>
+    <section className={utilStyles.headingMd}> </section>
+    <section className={utilStyles.headingMd}> </section>
+<hr />
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>

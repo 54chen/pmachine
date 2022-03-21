@@ -4,6 +4,17 @@ import matter from 'gray-matter'
 import {remark} from 'remark'
 import html from 'remark-html'
 
+export enum CODE {
+  OK = 200, NO_LOGIN = 403, HAS_GEN = 203, NO_POAP = 404, ERROR = 500, NO_REC = 405
+}
+
+export type RetData = {
+  isFren: boolean,
+  data: string,
+  link: string,
+  code: CODE,
+}
+
 export interface PostData{
   id: string;
   data:{

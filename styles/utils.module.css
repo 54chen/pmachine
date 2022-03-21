@@ -24,6 +24,11 @@
     font-size: 1.2rem;
     line-height: 1.5;
   }
+  .claimDIV {
+    height:200px;
+    margin: auto;
+    padding: 80px;
+  }
   
   .borderCircle {
     border-radius: 9999px;
