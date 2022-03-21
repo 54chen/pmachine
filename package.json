@@ -1,0 +1,36 @@
+{
+  "name": "pmachine",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "airtable": "^0.11.2",
+    "classnames": "^2.3.1",
+    "date-fns": "^2.28.0",
+    "gray-matter": "^4.0.3",
+    "next": "12.1.0",
+    "next-auth": "^4.3.1",
+    "npm": "^8.5.5",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-preset-env": "^7.4.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "remark": "^14.0.2",
+    "remark-html": "^15.0.1",
+    "sass": "^1.49.9",
+    "tailwindcss": "^3.0.23",
+    "twitter-lite": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.21",
+    "@types/react": "17.0.40",
+    "eslint": "8.11.0",
+    "eslint-config-next": "12.1.0",
+    "typescript": "4.6.2"
+  }
+}
