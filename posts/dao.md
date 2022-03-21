@@ -1,14 +1,6 @@
 ---
 title: 'DAO and the disruption of the Chinese world'
-tags: ["DAO", "BanklessCN", "BanklessDAO"]
-date: 2022-03-09T14:38:26+08:00
-draft: false
-weight: 1
-author: 'John'
-heroBackground: 'https://source.unsplash.com/random/600x400/?DAO'
-thumbnail: 'https://source.unsplash.com/random/600x400/?DAO'
-images: ['https://source.unsplash.com/random/400x600/?internet', 
-'https://source.unsplash.com/random/400x300/?bitcoin','https://source.unsplash.com/random/400x300/?whatsapp','https://source.unsplash.com/random/400x600/?twitter']
+date: '2022-03-09'
 ---
 
 The following is what I have learned after a few months of participating in BanklessDAO.
