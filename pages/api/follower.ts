@@ -13,7 +13,7 @@ interface ISession extends Session {
 }
 
 type Folist = {
-  "users": { "screen_name": string }[],
+  "users": { "name": string }[],
   "next_cursor": number
 }
 
@@ -67,7 +67,7 @@ export default async function handler(
     while (cursor != 0) {
       const s: Folist = await client.get('followers/list', { 'screen_name': 'John_0xFF', 'cursor': cursor, 'count': 200 })
       s.users.map((fname) => {
-        const field: Airtable.FieldSet = { "twitter": fname.screen_name + "" }
+        const field: Airtable.FieldSet = { "twitter": fname.name + "" }
         table2.create([{ fields: field }])
       })
       cursor = s.next_cursor
