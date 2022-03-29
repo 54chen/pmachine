@@ -24,7 +24,7 @@ const Frens = () => {
   const loading = status === "loading"
   const [retData, setRetData] = useState<RetData>({
     isFren: false,
-    data: "LOADING, WAIT FOR ME!",
+    data: "LOADING...!",
     link: "",
     code: CODE.OK
   })
