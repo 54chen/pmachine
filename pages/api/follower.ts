@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse, NextPageContext } from 'next'
 import Twitter, { TwitterOptions } from "twitter-lite";
 import { getSession } from "next-auth/react"
 import { Session } from "next-auth"
-import { table2 } from "./utils/Airtable"
+import { table3 } from "./utils/Airtable"
 import Airtable from 'airtable';
 import { CODE, RetData } from '../../lib/posts';
 
@@ -64,12 +64,14 @@ export default async function handler(
     const client = new Twitter(config)
 
     let cursor = -1
-    while (cursor != 0) {
+    let size = 200
+    while (size == 200) {
       const s: Folist = await client.get('followers/list', { 'screen_name': 'John_0xFF', 'cursor': cursor, 'count': 200 })
       s.users.map((fname) => {
         const field: Airtable.FieldSet = { "twitter": fname.name + "" }
-        table2.create([{ fields: field }])
+        table3.create([{ fields: field }])
       })
+      size = s.users.length
       cursor = s.next_cursor
     }
 
