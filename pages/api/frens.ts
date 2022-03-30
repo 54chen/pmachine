@@ -3,8 +3,10 @@ import type { NextApiRequest, NextApiResponse, NextPageContext } from 'next'
 import Twitter, { TwitterOptions } from "twitter-lite";
 import { getSession } from "next-auth/react"
 import { Session } from "next-auth"
-import { table } from "./utils/Airtable"
-import { CODE,RetData } from '../../lib/posts';
+import { CODE, RetData } from '../../lib/posts';
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient();
 
 interface ISession extends Session {
   t: string, s: string
@@ -20,10 +22,7 @@ type Frens = {
   ]
 }[]
 
-type Record = {
-  id: string,
-  fields: {link: string, twitter: string, date: string }
-}
+
 
 export default async function handler(
   req: NextApiRequest,
@@ -42,20 +41,31 @@ export default async function handler(
     })
     return
   }
-  const { t: accessToken, s: secret } = session as ISession
-
+  const { t: accessToken, s: secret, sn: screen_name } = session as ISession
 
   try {
-    const query = table.select({ filterByFormula: `twitter = '${session.user?.name}'` });
-    const content = await query.firstPage()
-
-    if(content.length==0) {
-      ///
-      res.status(CODE.NO_REC).send({
+    if (typeof screen_name !== "string" || screen_name == "") {
+      res.status(CODE.NO_LOGIN).send({
         isFren,
-        data: "NO RECORD",
-        code: CODE.NO_REC,
+        data: "You must be signed in to view the protected content on this page.",
+        code: CODE.NO_LOGIN,
         link: ""
+      })
+      return
+    }
+
+    const poaps = await prisma.poaps.findFirst({
+      where: {
+        author: screen_name
+      }
+    })
+
+    if (poaps != null && (poaps.link != null || poaps.link != "")) {
+      res.status(CODE.HAS_GEN).send({
+        isFren: true,
+        data: "ALREADY GENERATE",
+        code: CODE.HAS_GEN,
+        link: poaps.link
       })
       return
     }
@@ -68,45 +78,46 @@ export default async function handler(
     }
     const client = new Twitter(config)
     const s: Frens = await client.get('friendships/lookup', { 'screen_name': 'John_0xFF' })
-    console.log(s)
     s.map((f) => {
       f.connections.map((c) => {
         isFren = (c == 'following')
       })
     })
-    if(!isFren) {
-        ///
-        res.status(CODE.NO_POAP).send({
-          isFren,
-          data: "NO FOLLOWING",
-          code: CODE.NO_POAP,
-          link: ""
-        })
-        return
-    }
-
-    const formattedRecords:Record[] = content.map((rec) => {
-      return {
-        id: rec.id,
-        fields: {
-          link:rec.fields.link as string,
-          twitter: rec.fields.twitter as string,
-          date: rec.fields.date as string 
-        }
-      }
-    });
-    if (formattedRecords.length > 0) {
-      const r = formattedRecords[0] as Record
+    if (!isFren) {
       ///
-      res.status(CODE.HAS_GEN).send({
+      res.status(CODE.NO_POAP).send({
         isFren,
-        data: "Your link was generated! Date:" + r.fields.date,
-        code: CODE.HAS_GEN,
-        link: r.fields.link
+        data: "NO FOLLOWING",
+        code: CODE.NO_POAP,
+        link: ""
       })
       return
     }
 
+
+    const result = await prisma.$executeRaw`UPDATE Poaps SET author = ${screen_name} where author='' limit 1;`
+    if (result < 1) {
+      res.status(CODE.ERROR).send({
+        isFren,
+        data: "NO POAPS ALREADY",
+        code: CODE.ERROR,
+        link: ""
+      })
+      return
+    } 
+
+    const npoaps = await prisma.poaps.findFirst({
+      where: {
+        author: screen_name
+      }
+    })
+    res.status(CODE.OK).send({
+      isFren: true,
+      data: "OK",
+      code: CODE.OK,
+      link: npoaps?.link?npoaps.link:""
+    })
+    return
   } catch (error) {
     console.error(error);
     ///
@@ -118,12 +129,5 @@ export default async function handler(
     })
     return
   }
-
-  res.status(CODE.OK).send({
-    isFren,
-    data: "OK",
-    code: CODE.OK,
-    link: ""
-  })
-  return
+ 
 }

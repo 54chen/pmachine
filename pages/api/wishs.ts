@@ -3,10 +3,10 @@ import type { NextApiRequest, NextApiResponse, NextPageContext } from 'next'
 import Twitter, { TwitterOptions } from "twitter-lite";
 import { getSession } from "next-auth/react"
 import { Session } from "next-auth"
-import { table2 } from "./utils/Airtable"
-import Airtable from 'airtable';
-import { CODE,RetData } from '../../lib/posts';
- 
+import { CODE, RetData } from '../../lib/posts';
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient();
 
 interface ISession extends Session {
   t: string, s: string
@@ -22,10 +22,6 @@ type Frens = {
   ]
 }[]
 
-type Record = {
-  id: string,
-  fields: { link: string, twitter: string, date: string }
-}
 
 export default async function handler(
   req: NextApiRequest,
@@ -44,20 +40,30 @@ export default async function handler(
     })
     return
   }
-  const { t: accessToken, s: secret } = session as ISession
+  const { t: accessToken, s: secret, sn: screen_name } = session as ISession
 
-  const screenName = session.user?.name
   try {
-    const query = table2.select({ filterByFormula: `twitter = '${screenName}'` });
-    const content = await query.firstPage()
-
-    if (content.length > 0) {
-      ///
-      res.status(CODE.HAS_GEN).send({
+    if (typeof screen_name !== "string" || screen_name == "") {
+      res.status(CODE.NO_LOGIN).send({
         isFren,
-        data: "ALREADY RECORD",
-        code: CODE.HAS_GEN,
+        data: "You must be signed in to view the protected content on this page.",
+        code: CODE.NO_LOGIN,
         link: ""
+      })
+      return
+    }
+    const poaps = await prisma.poaps.findFirst({
+      where: {
+        author: screen_name
+      }
+    })
+
+    if (poaps != null && (poaps.link != null || poaps.link != "")) {
+      res.status(CODE.HAS_GEN).send({
+        isFren: true,
+        data: "ALREADY GENERATE",
+        code: CODE.HAS_GEN,
+        link: poaps.link
       })
       return
     }
@@ -70,7 +76,6 @@ export default async function handler(
     }
     const client = new Twitter(config)
     const s: Frens = await client.get('friendships/lookup', { 'screen_name': 'John_0xFF' })
-    console.log(s)
     s.map((f) => {
       f.connections.map((c) => {
         isFren = (c == 'following')
@@ -86,23 +91,11 @@ export default async function handler(
       })
       return
     }
-
-    const field:Airtable.FieldSet = {"twitter":screenName+""}
-    const createdRecords = await table2.create([ { fields: field}]);
-    
-    const createdRecord = {
-      id: createdRecords[0].id,
-      fields: createdRecords[0].fields,
-    };
-    if (createdRecord.id == null) {
-      res.status(CODE.ERROR).send({
-        isFren,
-        data: "DB ERROR",
-        code: CODE.ERROR,
-        link: ""
-      })
-      return
-    }
+    const Wishs = await prisma.wishs.create({
+      data: {
+        author: screen_name
+      }
+    })
   } catch (error) {
     console.error(error);
     ///

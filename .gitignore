@@ -39,3 +39,4 @@ yarn-error.log*
 .env
 .eslintrc.json
 yarn.lock
+pages/api/links.csv

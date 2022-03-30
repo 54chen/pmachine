@@ -16,6 +16,7 @@ interface RetData {
   data: string,
   link: string,
   code: CODE,
+  style: string,
 }
 
 const Frens = () => {
@@ -26,7 +27,8 @@ const Frens = () => {
     isFren: false,
     data: "LOADING...!",
     link: "",
-    code: CODE.OK
+    code: CODE.OK,
+    style: "loading"
   })
 
   if (!session) {
@@ -60,7 +62,10 @@ const Frens = () => {
         {session && (
 
           <div className={utilStyles.claimDIV}>
-            <span>{retData?.code}:{retData?.data}</span>
+            {(retData?.style == 'loading') && (<span className={utilStyles.loading}>{retData?.code}:{retData?.data}<img
+            src="/images/loading.png" /></span>)}
+            {(retData?.style !== 'loading') && (<span className={utilStyles.done}>{retData?.code}:{retData?.data}</span>)}
+
             <Link href={`${retData?.link}`}>
               <a className={styles.buttonPrimaryClaim}>{retData?.link}</a>
             </Link>

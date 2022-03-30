@@ -55,3 +55,19 @@
   .lightText {
     color: #999;
   }
+
+  .loading {
+    background-color: #999;
+    border: #999 solid 1px;
+    margin: 8px;
+    padding: 8px;
+    display: block;
+  }
+
+  .done {
+    background-color: #999;
+    border: #999 solid 1px;
+    margin: 8px;
+    padding: 8px;
+    display: block;
+  }

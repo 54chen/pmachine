@@ -16,6 +16,7 @@ interface RetData {
   data: string,
   link: string,
   code: CODE,
+  style: string,
 }
 
 const Frens = () => {
@@ -26,7 +27,8 @@ const Frens = () => {
     isFren: false,
     data: "LOADING, I AM REQUESTING THE RESULT!",
     link: "",
-    code: CODE.OK
+    code: CODE.OK,
+    style: "loading"
   })
 
   if (!session) {
@@ -59,8 +61,11 @@ const Frens = () => {
       <section className={utilStyles.headingMd}>
         {session && (
 
+
           <div className={utilStyles.claimDIV}>
-            {retData?.code}:{retData?.data}
+            {(retData?.style == 'loading') && (<span className={utilStyles.loading}>{retData?.code}:{retData?.data}<img
+              src="/images/loading.png" /></span>)}
+            {(retData?.style !== 'loading') && (<span className={utilStyles.done}>{retData?.code}:{retData?.data}</span>)}
           </div>
 
         )}
