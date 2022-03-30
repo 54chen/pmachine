@@ -31,13 +31,6 @@ const Frens = () => {
     style: "loading"
   })
 
-  if (!session) {
-    return (
-      <Layout home>
-        <AccessDenied />
-      </Layout>
-    )
-  }
   // Fetch content from protected route
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +41,14 @@ const Frens = () => {
     fetchData()
   }, [session])
 
+  if (!session) {
+    return (
+      <Layout home>
+        <AccessDenied />
+      </Layout>
+    )
+  }
+  
   // When rendering client side don't display anything until loading is complete
   if (typeof window !== "undefined" && loading) return null
 
