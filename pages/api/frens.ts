@@ -4,9 +4,7 @@ import Twitter, { TwitterOptions } from "twitter-lite";
 import { getSession } from "next-auth/react"
 import { Session } from "next-auth"
 import { CODE, RetData } from '../../lib/posts';
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient();
+import { prisma } from '../../lib/prisma'
 
 interface ISession extends Session {
   t: string, s: string
