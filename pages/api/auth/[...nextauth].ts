@@ -27,15 +27,15 @@ export default NextAuth({
       if (account) {
         token.t = account.oauth_token
         token.s = account.oauth_token_secret
-        token.sn = profile?.screen_name
+        token.sn = profile?.name
       }
       return token
     },
     async session({ session, token, user }) {
       // Send properties to the client, like an access_token from a provider.
-      session.t = token.t
-      session.s = token.s
-      session.sn = token.sn
+      // session.t = token.t
+      // session.s = token.s
+      // session.sn = token.sn
       return session
     }
   },

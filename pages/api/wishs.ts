@@ -38,7 +38,8 @@ export default async function handler(
     })
     return
   }
-  const { t: accessToken, s: secret, sn: screen_name } = session as ISession
+  const { t: accessToken, s: secret } = session as ISession
+  const screen_name = session.user?.name
 
   try {
     if (typeof screen_name !== "string" || screen_name == "") {
