@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { signIn, signOut, useSession } from "next-auth/react"
 
 
-const name = 'Welcome, John\'s frens'
-export const siteTitle = 'POAP is just for John\'s frens!!!'
+const name = 'Poap Machine 1.0'
+export const siteTitle = 'This is the Poap Machine 1.0'
 
 interface LayoutProps {
   children: ReactNode;
@@ -23,7 +23,7 @@ export default function Layout({ children, home }: LayoutProps) {
       <link rel="icon" href="/favicon.ico" />
       <meta
         name="description"
-        content="POAP is just for John\'s frens!!!"
+        content="This is the Poap Machine 1.0"
       />
       <meta
         property="og:image"
